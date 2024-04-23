@@ -87,10 +87,13 @@ export default defineComponent({
       useProductStore().deleteProduct(id);
     },
     updateProduct(modifiedProduct: any, productName: string) {
+      const confirmUpdate = confirm(`Are you sure you want to update ${productName}?`);
+      if (confirmUpdate) {
       // Implement the logic to modify product
       useProductStore().updateProduct(modifiedProduct, productName);
       // Close the dialog after saving
       this.showModifyDialog = false;
+      }
     }
   }
 });
