@@ -5,12 +5,14 @@
         <StoreItem :product="product" />
       </v-col>
     </v-row>
+    <div v-if="loading">Loading products...</div>
+    <div v-if="error">{{ error.message }}</div>
   </v-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue';
-import StoreItem from './StoreItem.vue';
+import { defineComponent, onMounted, ref, computed, Ref } from 'vue';
+import StoreItem from '../components/StoreItem.vue';
 import { useProductStore } from '../stores/ProductStore';
 
 export default defineComponent({
@@ -19,18 +21,29 @@ export default defineComponent({
   },
   setup() {
     const productStore = useProductStore();
-    
-    onMounted(() => {
-      if (productStore.products.length === 0) {
-        productStore.init(); // This ensures that the store is initialized on mount if not already loaded
+    const loading = ref(false);
+    // Define error as Ref<Error | null> to allow storing Error objects
+    const error: Ref<Error | null> = ref(null);
+
+    onMounted(async () => {
+      loading.value = true;
+      try {
+        await productStore.init();
+      } catch (e) {
+        // Properly handle and typecast the error
+        error.value = e as Error;
+        console.error("Failed to load products:", e);
+      } finally {
+        loading.value = false;
       }
     });
 
-    // Computed property to show all products
     const allProducts = computed(() => productStore.products);
 
     return {
-      allProducts, // Return all products
+      allProducts,
+      loading,
+      error
     };
   },
 });

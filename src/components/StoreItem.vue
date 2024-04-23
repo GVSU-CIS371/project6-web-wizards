@@ -4,7 +4,7 @@
     <v-card-title>{{ product.data.name }}</v-card-title>
     <v-card-subtitle>{{ product.data.category }}</v-card-subtitle>
     <v-card-text>{{ product.data.description }}</v-card-text>
-    <v-card-actions style="display: flex; justify-content: center;">
+    <v-card-actions class="justify-center">
       <v-btn>
         <v-icon color="green" left>mdi-cash</v-icon>
         ${{ product.data.price }}
@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { ProductDoc } from '../types/product'; // Import the type definition
+import { ProductDoc } from '../types/product'; // Make sure the path is correct
 
 export default defineComponent({
   props: {
@@ -35,3 +35,10 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+.justify-center {
+  display: flex;
+  justify-content: center;
+}
+</style>

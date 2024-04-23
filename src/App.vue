@@ -16,7 +16,7 @@
     </v-main>
 
     <v-footer color="primary" app>
-      © 2023 My Online Store. All rights reserved.
+      © 2024 My Online Store. All rights reserved.
     </v-footer>
   </v-app>
 </template>
