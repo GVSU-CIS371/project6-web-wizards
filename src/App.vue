@@ -71,6 +71,14 @@
 import { ref } from 'vue';
 import { db } from './firebaseConfig'; // Adjust the import path as necessary
 import { collection, addDoc } from 'firebase/firestore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const refreshPage = () => {
+  router.go(1); // Reloads the current route
+};
+
 
 const links = ref([
   { text: "Home", to: "/", icon: "mdi-home" },
@@ -110,12 +118,14 @@ const addProduct = async () => {
     const docRef = await addDoc(col, productData);
     console.log("Product added with ID: ", docRef.id);
     showDialog.value = false;
+    
     // Reset form after saving
     newProduct.value = { name: "", description: "", price: 0, rating: 0, stock: 0, image: "", category: "" };
+    refreshPage();
   } catch (error) {
     console.error("Error adding document: ", error);
   }
-  window.location.reload();
+
   }
   
 };

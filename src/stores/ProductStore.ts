@@ -2,9 +2,9 @@
 
 import { defineStore } from 'pinia';
 import { collection, getDocs, doc, setDoc, deleteDoc, query, where, DocumentData, addDoc } from 'firebase/firestore';
-import { ProductDoc, Product } from '../types/product'; // Make sure the path is correct
-import { initProducts } from '../data-init'; // Ensure this path is correct
-import { db } from '../firebaseConfig.ts'; // Adjust the path as necessary
+import { ProductDoc, Product } from '../types/product'; 
+import { initProducts } from '../data-init'; 
+import { db } from '../firebaseConfig.ts'; 
 
 export const useProductStore = defineStore('ProductStore', {
   state: () => ({
@@ -91,11 +91,8 @@ export const useProductStore = defineStore('ProductStore', {
           if (Object.keys(updatedProductData).length > 0) {
             await setDoc(doc(col, productDoc.id), updatedProductData, { merge: true });
             console.log("Product updated:", productName);
-              // Find the product in your component's data and update it
-            const productIndex = this.products.findIndex(product => product.data.name === productName);
-            if (productIndex !== -1) {
-              this.products[productIndex] = { ...this.products[productIndex], ...updatedProductData };
-            }
+            // Refresh products in state after update
+            await this.init();
           } else {
             console.log("No changes to update for product:", productName);
           }
@@ -108,9 +105,15 @@ export const useProductStore = defineStore('ProductStore', {
     },
     
     async deleteProduct(id: string) {
-      const productRef = doc(db, "products", id);
-      await deleteDoc(productRef);
-      this.products = this.products.filter(product => product.id !== id);
+      try {
+        const productRef = doc(db, "products", id);
+        await deleteDoc(productRef);
+        console.log("Product deleted:", id);
+        // Remove the deleted product from the state
+        this.products = this.products.filter(product => product.id !== id);
+      } catch (error) {
+        console.error("Error deleting product:", error);
+      }
     },
 
     async filterByCategory(category: string) {
