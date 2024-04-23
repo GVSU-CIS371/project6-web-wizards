@@ -92,7 +92,9 @@ const newProduct = ref({
 });
 
 const addProduct = async () => {
-  try {
+  const confirmed = window.confirm("Are you sure you want to add this product?");
+  if (confirmed) {
+    try {
     // Prepare the product data ensuring all fields are correctly typed
     const productData = {
       name: newProduct.value.name,
@@ -113,5 +115,8 @@ const addProduct = async () => {
   } catch (error) {
     console.error("Error adding document: ", error);
   }
+  window.location.reload();
+  }
+  
 };
 </script>
