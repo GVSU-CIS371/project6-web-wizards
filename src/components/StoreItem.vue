@@ -83,8 +83,12 @@ export default defineComponent({
   },
   methods: {
     deleteProduct(id: string) {
+      const confirmDelete = confirm('Are you sure you want to delete this product?');
+      if (confirmDelete) {
       // Call the deleteProduct method from ProductStore
       useProductStore().deleteProduct(id);
+      }
+
     },
     updateProduct(modifiedProduct: any, productName: string) {
       const confirmUpdate = confirm(`Are you sure you want to update ${productName}?`);
