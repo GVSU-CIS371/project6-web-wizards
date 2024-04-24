@@ -1,7 +1,7 @@
 // src/stores/ProductStore.ts
 
 import { defineStore } from 'pinia';
-import { collection, getDocs, doc, setDoc, deleteDoc, query, where, DocumentData, addDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { ProductDoc, Product } from '../types/product'; 
 import { initProducts } from '../data-init'; 
 import { db } from '../firebaseConfig.ts'; 
